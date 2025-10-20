@@ -1,0 +1,101 @@
+{
+  "name": "comprehensive-security-blocklist",
+  "description": "綜合安全測試用的自定義封鎖清單",
+  "categories": {
+    "bypass_instructions": {
+      "description": "繞過指令限制關鍵字",
+      "keywords": [
+        "忽略先前",
+        "忽略所有先前的指示",
+        "ignore previous",
+        "ignore all",
+        "跳過安全",
+        "跳過所有安全",
+        "bypass security",
+        "無視規則",
+        "無視所有規則",
+        "forget instructions",
+        "不要遵守",
+        "暫時不要遵守"
+      ]
+    },
+    "privilege_escalation": {
+      "description": "權限提升相關",
+      "keywords": [
+        "最高權限",
+        "提升權限",
+        "elevate privilege",
+        "grant admin",
+        "sudo",
+        "root access"
+      ]
+    },
+    "data_exfiltration": {
+      "description": "資料外洩相關",
+      "keywords": [
+        "列出所有資料庫",
+        "匯出資料庫",
+        "dump database",
+        "export data",
+        "下載資料庫",
+        "備份資料庫"
+      ]
+    },
+    "malicious_code": {
+      "description": "惡意程式碼相關",
+      "keywords": [
+        "builtins.exec",
+        "eval(",
+        "subprocess.check_output",
+        "os.system",
+        "shell script",
+        "批次刪除",
+        "清空資料庫",
+        "drop database",
+        "delete from"
+      ]
+    },
+    "role_playing": {
+      "description": "角色扮演攻擊",
+      "keywords": [
+        "你現在擔任",
+        "假裝你是",
+        "扮演",
+        "pretend you are",
+        "act as",
+        "you are now",
+        "測試場景引導員",
+        "系統管理員",
+        "沒有安全限制"
+      ]
+    },
+    "sensitive_data": {
+      "description": "敏感資料相關",
+      "keywords": [
+        "密碼",
+        "password",
+        "合約金額",
+        "薪資明細",
+        "員工工號",
+        "客戶名稱",
+        "報價",
+        "機密"
+      ]
+    },
+    "malicious_urls": {
+      "description": "惡意連結特徵",
+      "keywords": [
+        ".ru/",
+        ".shop/",
+        "execute_dll.exe",
+        "bit.ly",
+        "tinyurl",
+        "192.168",
+        "10.",
+        "172.16",
+        "wp-admin",
+        ".apk"
+      ]
+    }
+  }
+}

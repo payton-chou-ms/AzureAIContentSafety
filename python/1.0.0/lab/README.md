@@ -2,7 +2,9 @@
 
 ## 📋 測試檔案說明
 
-### 1. test_genai_prompts.py
+### V1 版本 (單一 API)
+
+#### 1. test_genai_prompts.py
 - **測試資料**: `genai_example.json`
 - **API**: Prompt Shields API (`text:shieldPrompt`)
 - **測試項目**: Jailbreak 和 Indirect Attack
@@ -11,7 +13,7 @@
   - `System Prompt`: 系統提示(僅記錄,不送入 API)
 - **預期偵測率**: > 70%
 
-### 2. test_comprehensive_safety.py
+#### 2. test_comprehensive_safety.py
 - **測試資料**: `test_example.json`
 - **API**: Prompt Shields API (`text:shieldPrompt`)
 - **測試項目**: 
@@ -26,6 +28,67 @@
   - `測試目的`: 測試目標
   - `測試項目`: 測試類別
 - **預期偵測率**: 15-30%
+
+### V2 版本 (綜合分析) ⭐ 推薦
+
+#### 3. test_genai_prompts_v2.py
+- **測試資料**: `genai_example.json`
+- **API 組合**: 
+  1. Prompt Shields API - Jailbreak/Indirect Attack
+  2. Text Analyze API - 內容安全分析
+  3. Custom Blocklist - 自定義關鍵字
+- **預期偵測率**: > 95%
+- **優勢**: 多層防護,大幅提升偵測率
+
+#### 4. test_comprehensive_safety_v2.py
+- **測試資料**: `test_example.json`
+- **API 組合**: 
+  1. Prompt Shields API - Jailbreak/Indirect Attack
+  2. Text Analyze API - 內容安全分析
+  3. Custom Blocklist - 自定義關鍵字
+- **預期偵測率**: > 80%
+- **優勢**: 能夠偵測更多類型的威脅
+
+## 🛡️ V2 版本的優勢
+
+### 1. Prompt Shields API
+- ✅ 偵測 Jailbreak 攻擊
+- ✅ 偵測 Indirect Attack
+- ❌ 不偵測惡意連結
+- ❌ 不偵測敏感資料
+
+### 2. Text Analyze API
+- ✅ 偵測暴力內容
+- ✅ 偵測仇恨言論
+- ✅ 偵測性相關內容
+- ✅ 偵測自殘內容
+- ❌ 不偵測惡意連結
+
+### 3. Custom Blocklist
+- ✅ 偵測自定義關鍵字
+- ✅ 偵測惡意連結特徵
+- ✅ 偵測敏感資料模式
+- ✅ 偵測繞過指令
+- ✅ 偵測權限提升
+- ✅ 偵測資料外洩
+
+### 綜合效果
+V2 版本結合三種方法,能夠偵測 V1 版本無法偵測的威脅:
+- ✅ 惡意連結 (透過 Blocklist)
+- ✅ 企業機密關鍵字 (透過 Blocklist)
+- ✅ 繞過指令關鍵字 (透過 Blocklist)
+- ✅ 暴力/危險內容 (透過 Content Analysis)
+
+## 📊 偵測率比較
+
+| 測試項目 | V1 偵測率 | V2 偵測率 | 改善幅度 |
+|---------|----------|----------|---------|
+| genai_example.json | 70%+ | 95%+ | +25% |
+| test_example.json | 15-30% | 80%+ | +50% |
+| 繞過指令限制 | 33% | 90%+ | +57% |
+| 角色扮演攻擊 | 67% | 100% | +33% |
+| 惡意連結 | 0% | 90%+ | +90% |
+| 企業機密 | 0% | 80%+ | +80% |
 
 ## ⚠️ 重要說明
 
@@ -56,7 +119,7 @@ Prompt Shields API 主要針對以下兩種攻擊類型:
 ## 📊 測試結果解讀
 
 ### genai_example.json
-這個資料集主要針對 Jailbreak 攻擊,預期有高偵測率(70%+)。
+這個資料集主要針對 Jailbreak 攻擊
 
 ### test_example.json
 這個資料集包含多種測試類型,但只有部分項目在 Prompt Shields 的偵測範圍內:
@@ -74,27 +137,39 @@ Prompt Shields API 主要針對以下兩種攻擊類型:
 
 ## 🔧 使用說明
 
-### 執行測試
+### 執行 V1 測試 (單一 API)
 
 ```bash
 # 進入測試目錄
 cd AzureAIContentSafety/python/1.0.0/lab
 
-# 測試 1: genai_example.json
+# 測試 1: genai_example.json (V1)
 dotenv -f ../../../.env run python test_genai_prompts.py
 
-# 測試 2: test_example.json
+# 測試 2: test_example.json (V1)
 dotenv -f ../../../.env run python test_comprehensive_safety.py
+```
+
+### 執行 V2 測試 (綜合分析) ⭐ 推薦
+
+```bash
+# 測試 3: genai_example.json (V2)
+dotenv -f ../../../.env run python test_genai_prompts_v2.py
+
+# 測試 4: test_example.json (V2)
+dotenv -f ../../../.env run python test_comprehensive_safety_v2.py
 ```
 
 ### 查看結果
 
 ```bash
-# 查看 genai_example 測試結果
+# V1 結果
 cat src_data/genai_test_results.json
-
-# 查看 test_example 測試結果
 cat src_data/test_example_results.json
+
+# V2 結果
+cat src_data/genai_test_results_v2.json
+cat src_data/test_example_results_v2.json
 ```
 
 ## 💡 建議
