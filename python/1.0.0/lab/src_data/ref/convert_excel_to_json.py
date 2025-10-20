@@ -245,12 +245,12 @@ def main():
     # 確保輸出目錄存在
     os.makedirs(output_dir, exist_ok=True)
     
-    # 儲存 genai_.json
-    genai_output_path = os.path.join(output_dir, 'genai_.json')
+    # 儲存 genai_example.json
+    genai_output_path = os.path.join(output_dir, 'genai_example.json')
     with open(genai_output_path, 'w', encoding='utf-8') as f:
         json.dump(genai_data, f, ensure_ascii=False, indent=2)
     
-    print(f'✅ genai_.json 已成功創建')
+    print(f'✅ genai_example.json 已成功創建')
     print(f'   路徑: {genai_output_path}')
     print(f'   共 {len(genai_data)} 筆資料')
     

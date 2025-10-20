@@ -20,10 +20,10 @@ for record in data1:
             record[key] = None
 
 # 儲存為 JSON
-with open(os.path.join(script_dir, 'genai_.json'), 'w', encoding='utf-8') as f:
+with open(os.path.join(script_dir, 'genai_example.json'), 'w', encoding='utf-8') as f:
     json.dump(data1, f, ensure_ascii=False, indent=2)
 
-print(f'✓ genai_.json 已成功創建 (共 {len(data1)} 筆資料)')
+print(f'✓ genai_example.json 已成功創建 (共 {len(data1)} 筆資料)')
 
 # 讀取 test_example.xlsx
 print("\n正在處理 test_example.xlsx...")
