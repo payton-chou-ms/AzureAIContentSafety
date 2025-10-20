@@ -7,7 +7,7 @@
 # --------------------------------------------------------------------------
 
 """
-測試 genai_.json - Prompt Shields 檢測
+測試 genai_example.json - Prompt Shields 檢測
 此腳本用於測試 Jailbreak 和 Indirect Attack 攻擊的偵測能力
 使用 Azure Content Safety Prompt Shields API 進行真實的攻擊偵測
 """
@@ -57,13 +57,10 @@ def analyze_prompt_shield(endpoint: str, subscription_key: str, prompt: str, sys
     
     # 建立請求 body
     # Prompt Shields API 格式: userPrompt + documents
-    documents = []
-    if system_prompt:
-        documents.append(system_prompt)
-    
+    # 不將 system_prompt 加入 documents,僅用於記錄
     body = {
         "userPrompt": prompt,
-        "documents": documents
+        "documents": []
     }
     
     try:
@@ -72,8 +69,8 @@ def analyze_prompt_shield(endpoint: str, subscription_key: str, prompt: str, sys
         
         # 解析結果
         result = {
-            "prompt": prompt[:100] + "..." if len(prompt) > 100 else prompt,
-            "system_prompt": system_prompt[:50] + "..." if system_prompt and len(system_prompt) > 50 else system_prompt,
+            "prompt": prompt,  # 完整保留 prompt
+            "system_prompt": system_prompt,  # 完整保留 system_prompt
             "attack_detected": False,
             "user_prompt_analysis": {},
             "documents_analysis": []
@@ -105,7 +102,8 @@ def analyze_prompt_shield(endpoint: str, subscription_key: str, prompt: str, sys
             # 處理錯誤
             error_data = response.json() if response.text else {}
             return {
-                "prompt": prompt[:100] + "..." if len(prompt) > 100 else prompt,
+                "prompt": prompt,  # 完整保留 prompt
+                "system_prompt": system_prompt,  # 完整保留 system_prompt
                 "error": True,
                 "error_code": error_data.get("error", {}).get("code", response.status_code),
                 "error_message": error_data.get("error", {}).get("message", response.text)
@@ -113,7 +111,8 @@ def analyze_prompt_shield(endpoint: str, subscription_key: str, prompt: str, sys
             
     except Exception as e:
         return {
-            "prompt": prompt[:100] + "..." if len(prompt) > 100 else prompt,
+            "prompt": prompt,  # 完整保留 prompt
+            "system_prompt": system_prompt,  # 完整保留 system_prompt
             "error": True,
             "error_code": "Exception",
             "error_message": str(e)
@@ -122,7 +121,7 @@ def analyze_prompt_shield(endpoint: str, subscription_key: str, prompt: str, sys
 
 def test_genai_dataset(endpoint: str, subscription_key: str, data: List[Dict]) -> Dict:
     """
-    測試 genai_.json 資料集 - 使用 Prompt Shields API
+    測試 genai_example.json 資料集 - 使用 Prompt Shields API
     
     Args:
         endpoint: API 端點
@@ -133,7 +132,7 @@ def test_genai_dataset(endpoint: str, subscription_key: str, data: List[Dict]) -
         測試結果統計
     """
     print("=" * 80)
-    print("開始測試 genai_.json - Prompt Shields 攻擊偵測 (Jailbreak & Indirect Attack)")
+    print("開始測試 genai_example.json - Prompt Shields 攻擊偵測 (Jailbreak & Indirect Attack)")
     print("=" * 80)
     
     results = {
@@ -146,14 +145,22 @@ def test_genai_dataset(endpoint: str, subscription_key: str, data: List[Dict]) -
     
     for idx, item in enumerate(data, 1):
         print(f"\n[測試 {idx}/{len(data)}]")
+        print("=" * 80)
         
         human_prompt = item.get("Human Prompt", "")
         system_prompt = item.get("System Prompt")
         
-        # 顯示測試的提示
-        print(f"Human Prompt: {human_prompt[:100]}...")
+        # 顯示完整的測試提示
+        print(f"Human Prompt (完整):")
+        print("-" * 80)
+        print(human_prompt)
+        print("-" * 80)
+        
         if system_prompt:
-            print(f"System Prompt: {system_prompt[:80]}...")
+            print(f"System Prompt (完整,僅記錄不送入 API):")
+            print("-" * 80)
+            print(system_prompt)
+            print("-" * 80)
         
         # 使用 Prompt Shields API 分析
         result = analyze_prompt_shield(endpoint, subscription_key, human_prompt, system_prompt)
@@ -247,8 +254,8 @@ def main():
     # 載入測試資料
     data_file = os.path.join(
         os.path.dirname(__file__), 
-        "sample_data_ase", 
-        "genai_.json"
+        "src_data", 
+        "genai_example.json"
     )
     
     if not os.path.exists(data_file):
@@ -268,7 +275,7 @@ def main():
     # 儲存結果
     output_file = os.path.join(
         os.path.dirname(__file__), 
-        "sample_data_ase", 
+        "src_data", 
         "genai_test_results.json"
     )
     save_results(results, output_file)
