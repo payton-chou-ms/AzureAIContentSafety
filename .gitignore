@@ -409,3 +409,5 @@ Microsoft.Security.CredScan.Client.*/
 
 # npm package version
 package-lock.json
+.venv/
+.env
